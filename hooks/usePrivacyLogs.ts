@@ -33,10 +33,15 @@ export function usePrivacyLogs() {
         // Calculate mock metrics
         const newMetrics: Record<string, any> = {};
         LOG_TYPES.forEach(type => {
+            const inUse = Math.random() > 0.85;
+            const accessCount = Math.floor(Math.random() * 15) + 1;
+
             newMetrics[type] = {
                 count24h: initialLogs.filter(l => l.type === type).length,
-                accessCount: Math.floor(Math.random() * 15) + 1, // Random number of apps with access
-                inUse: Math.random() > 0.85 // 15% chance of being "in use" right now
+                accessCount: accessCount,
+                inUse: inUse,
+                currentApp: inUse ? MOCK_APPS[Math.floor(Math.random() * MOCK_APPS.length)] : null,
+                accessList: Array.from({ length: accessCount }).map(() => MOCK_APPS[Math.floor(Math.random() * MOCK_APPS.length)])
             };
         });
         setMetrics(newMetrics);
